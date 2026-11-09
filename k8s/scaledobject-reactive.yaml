@@ -1,0 +1,22 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: demo-reactive
+  namespace: autoscale-lab
+spec:
+  scaleTargetRef:
+    name: demo-app
+  minReplicaCount: 2
+  maxReplicaCount: 12
+  pollingInterval: 15
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleDown:
+          stabilizationWindowSeconds: 60
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://kube-prometheus-stack-prometheus.monitoring.svc:9090
+        query: sum(rate(http_requests_total{namespace="autoscale-lab",job="demo-app"}[1m]))
+        threshold: "15"
