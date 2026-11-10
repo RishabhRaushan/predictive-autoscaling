@@ -1,0 +1,7 @@
+venv/
+__pycache__/
+terraform/.terraform/
+terraform-aws/.terraform/
+*.tfstate
+*.tfstate.*
+terraform/autoscale-lab-config
